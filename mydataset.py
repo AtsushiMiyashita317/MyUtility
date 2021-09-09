@@ -31,12 +31,16 @@ def save(dataset, dataset_path, data_dir, batchsize):
 
 
 class MyDataset(Dataset):
-    def __init__(self, dataset_path, data_dir, transform=None, target_transform=None):
+    def __init__(self, dataset_path, data_dir, transform=None, target_transform=None, length=None):
         self.dataset_path = dataset_path
         self.data_path = os.path.join(dataset_path, data_dir)
 
         with open(os.path.join(dataset_path, f"{data_dir}.pickle"), 'rb') as f:
             self.batchsize,self.length, self.version = pickle.load(f)
+
+        if length:
+            if length < self.length:
+                self.length = length
 
         self.cache_idx = -1
         self.cache_data = None
